@@ -28,7 +28,7 @@ rl.on('line', (line) => {
   } else {
     const seq = line.split(' => ');
     if (seq[1] === '#') {
-      sequences.push(seq);
+      sequences.push(seq[0]); // only need pots
     }
   }
 })
@@ -44,7 +44,7 @@ rl.on('line', (line) => {
 
     nextState = '..';
     for (let i = 2; i < prevState.length - 2; i++) {
-      nextState += sequences.map(s => s[0]).indexOf(prevState.substring(i-2,i+3)) > -1 ? '#' : '.';
+      nextState += sequences.indexOf(prevState.substring(i-2,i+3)) > -1 ? '#' : '.';
     }
     nextState += '..';
 
@@ -52,7 +52,7 @@ rl.on('line', (line) => {
     const diff = sum-sums[j-1][0];
     sums.push([sum, diff]);
 
-    if (sums.slice(-2).every(s => s[1] === diff)) { // stabilizes in this case with 2 consecutive diffs.
+    if (sums.slice(-2).every(s => s[1] === diff)) { // with given input sum diffs stabilize with 2 equal diffs.
       break;
     }
 
